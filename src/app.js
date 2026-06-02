@@ -29,11 +29,19 @@ async function init() {
 
   // Try to fetch from API, fallback to mock data
   try {
-    const response = await fetch('/api/stats', { signal: AbortSignal.timeout(5000) });
-    if (!response.ok) throw new Error(`HTTP ${response.status}`);
-    const data = await response.json();
-    state.stats = data.stats || data;
-    state.accounts = data.accounts || [];
+    const [statsRes, accountsRes] = await Promise.all([
+      fetch('/api/stats', { signal: AbortSignal.timeout(5000) }),
+      fetch('/api/leaderboard?limit=10000', { signal: AbortSignal.timeout(5000) })
+    ]);
+    
+    if (!statsRes.ok) throw new Error(`HTTP ${statsRes.status}`);
+    if (!accountsRes.ok) throw new Error(`HTTP ${accountsRes.status}`);
+    
+    const statsData = await statsRes.json();
+    const accountsData = await accountsRes.json();
+    
+    state.stats = statsData.stats || statsData;
+    state.accounts = accountsData.accounts || [];
     state.useMockData = false;
   } catch {
     console.log('[PolyRank] API unreachable — switching to demo mode with mock data');
