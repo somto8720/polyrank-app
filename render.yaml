@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: polyrank-api
+    env: node
+    rootDir: server
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: TWITTERAPI_KEY
+        value: new1_a21029243b3f422a83c8ea088ce1715d
+      - key: NODE_ENV
+        value: production
