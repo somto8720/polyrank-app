@@ -43,12 +43,11 @@ export function renderProfile(account) {
 
     <!-- Profile Header -->
     <div class="glass-card-static profile-header-card" id="profile-header-card">
-      <div class="profile-avatar-large" style="background:${avatarColor}" id="profile-avatar">
-        ${initials}
-        <div class="profile-rank-overlay" id="profile-rank-overlay">#${account.current_rank}</div>
+      <img class="profile-avatar" src="${account.avatar_url || `https://unavatar.io/x/${account.handle}`}" alt="${initials}" onerror="this.onerror=null; this.outerHTML='<div class=\'profile-avatar\' style=\'background:${avatarColor}\'>${initials}</div>';" />
+      <div class="profile-title-container">
+        <h2 class="profile-name">${escapeHtml(account.display_name)}</h2>
+        <div class="profile-handle">@${escapeHtml(account.handle)}</div>
       </div>
-      <h1 class="profile-name" id="profile-name">${escapeHtml(account.display_name)}</h1>
-      <p class="profile-handle" id="profile-handle">@${escapeHtml(account.handle)}</p>
       <p class="profile-rank-text" id="profile-rank-text">Rank #${account.current_rank} of 10,000</p>
     </div>
 

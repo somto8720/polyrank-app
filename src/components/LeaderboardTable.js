@@ -38,7 +38,7 @@ export function renderLeaderboard(accounts, page = 1, totalPages = 1) {
       </td>
       <td>
         <div class="account-cell">
-          <div class="account-avatar" style="background:${avatarColor}" id="avatar-${a.handle}">${initials}</div>
+          <img class="account-avatar" src="${a.avatar_url || `https://unavatar.io/x/${a.handle}`}" alt="${initials}" onerror="this.onerror=null; this.outerHTML='<div class=\\'account-avatar\\' style=\\'background:${avatarColor}\\'>${initials}</div>';" id="avatar-${a.handle}" />
           <div class="account-info">
             <div class="account-name">${escapeHtml(a.display_name)}</div>
             <div class="account-handle">@${escapeHtml(a.handle)}</div>

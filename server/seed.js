@@ -126,9 +126,12 @@ async function run() {
   console.log('🌱 Seeding PolyRank database…');
 
   // ---------- 1. Insert accounts ----------
+  let currentViews = 1800000; // start below the top 100
+  let currentRank = 101;
+
   for (const row of POLYTWEET_DATA) {
     const avgViews = row.tweets > 0 ? Math.round(row.views / row.tweets) : 0;
-    const avatar = `https://unavatar.io/twitter/${row.handle}`;
+    const avatar = `https://unavatar.io/x/${row.handle}`;
 
     db.run(`
       INSERT OR REPLACE INTO accounts
@@ -138,7 +141,39 @@ async function run() {
     `, [row.handle, row.name, avatar, row.views, row.tweets, avgViews,
         row.rank, row.rank, now, now]);
   }
-  console.log(`  ✅ Inserted ${POLYTWEET_DATA.length} accounts`);
+
+  // Generate the remaining 9,900 accounts
+  const totalAccounts = 10000;
+  for (let i = currentRank; i <= totalAccounts; i++) {
+    const handle = `user${i}_poly`;
+    const name = `Polymarket Trader ${i}`;
+    const avatar = `https://unavatar.io/x/${handle}`;
+    
+    // Decrement views randomly to ensure realistic sorting
+    const decrease = Math.floor(Math.random() * 500) + 1;
+    currentViews = Math.max(100, currentViews - decrease);
+    
+    const tweets = Math.floor(Math.random() * 50) + 1;
+    const avgViews = Math.round(currentViews / tweets);
+
+    db.run(`
+      INSERT OR REPLACE INTO accounts
+        (handle, display_name, avatar_url, total_views, total_tweets, total_replies,
+         avg_views_per_tweet, current_rank, previous_rank, rank_change, first_seen, last_updated)
+      VALUES (?, ?, ?, ?, ?, 0, ?, ?, ?, 0, ?, ?)
+    `, [handle, name, avatar, currentViews, tweets, avgViews, i, i, now, now]);
+
+    // Push to POLYTWEET_DATA for the snapshot generation loop below
+    POLYTWEET_DATA.push({
+      rank: i,
+      name,
+      handle,
+      views: currentViews,
+      tweets
+    });
+  }
+
+  console.log(`  ✅ Inserted ${totalAccounts} accounts`);
 
   // ---------- 2. Generate 30 days of daily_snapshots ----------
   const today = new Date();
