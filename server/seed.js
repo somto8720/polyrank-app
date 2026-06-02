@@ -114,6 +114,7 @@ const POLYTWEET_DATA = [
   { rank: 98, name: 'Said', handle: 'said116dao', views: 1900000, tweets: 1398 },
   { rank: 99, name: 'aixbt', handle: 'aixbt_agent', views: 1800000, tweets: 1268 },
   { rank: 100, name: 'dunik', handle: 'dunik_7', views: 1800000, tweets: 1523 },
+  { rank: 101, name: 'Chubby', handle: 'chubby1756', views: 1795000, tweets: 150 },
 ];
 
 // ──────────────────────────────────────────────────────────
@@ -126,8 +127,8 @@ async function run() {
   console.log('🌱 Seeding PolyRank database…');
 
   // ---------- 1. Insert accounts ----------
-  let currentViews = 1800000; // start below the top 100
-  let currentRank = 101;
+  let currentViews = 1795000; // start below chubby
+  let currentRank = 102;
 
   for (const row of POLYTWEET_DATA) {
     const avgViews = row.tweets > 0 ? Math.round(row.views / row.tweets) : 0;
