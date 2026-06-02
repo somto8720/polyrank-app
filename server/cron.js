@@ -12,6 +12,8 @@ const { fetchAllPages } = require('./twitterApi');
 //  Helpers
 // ──────────────────────────────────────────────────────────
 
+const delay = (ms) => new Promise(res => setTimeout(res, ms));
+
 /** Format a Date as YYYY-MM-DD */
 function fmtDate(d) {
   return d.toISOString().slice(0, 10);
@@ -233,6 +235,7 @@ async function runBackfill(startDate) {
     }
 
     cursor = chunkEnd;
+    await delay(5500); // Respect 1 req / 5s limit
   }
 
   // Recalc once at the end

@@ -90,8 +90,8 @@ async function fetchAllPages(sinceDate, untilDate) {
 
     cursor = result.next_cursor;
 
-    // Be respectful — wait 500ms between pages
-    await sleep(500);
+    // Be respectful — wait 5500ms between pages to respect free-tier QPS limit
+    await sleep(5500);
   } while (true);
 
   console.log(`[TwitterAPI] Done — ${allTweets.length} total tweets fetched.`);
